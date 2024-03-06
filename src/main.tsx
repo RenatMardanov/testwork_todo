@@ -9,9 +9,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <Provider store={store}>
         <React.StrictMode>
             <App />
-            {/* <Dialog>
-                <AddEditForm />
-            </Dialog> */}
         </React.StrictMode>
     </Provider>
 );

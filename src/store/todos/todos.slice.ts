@@ -49,8 +49,11 @@ export const todosSlice = createSlice({
             const todo: ITodo = action.payload;
             state.push(todo);
         },
+        removeTodo: (state, action: PayloadAction<number>) => {
+            state.splice(action.payload, 1);
+        },
     },
 });
 
-export const { addTodo } = todosSlice.actions;
+export const { addTodo, removeTodo } = todosSlice.actions;
 export default todosSlice.reducer;

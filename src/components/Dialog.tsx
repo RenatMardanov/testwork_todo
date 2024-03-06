@@ -2,13 +2,18 @@ import { ReactNode } from "react";
 
 interface IDialog {
     children: ReactNode;
+    onOpen: boolean;
 }
 
-const Dialog: React.FC<IDialog> = ({ children }) => {
+const Dialog: React.FC<IDialog> = ({ children, onOpen }) => {
     return (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg p-6">{children}</div>
-        </div>
+        <>
+            {onOpen && (
+                <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="bg-white rounded-lg p-6">{children}</div>
+                </div>
+            )}
+        </>
     );
 };
 

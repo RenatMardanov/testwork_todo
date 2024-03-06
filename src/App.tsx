@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Categories, ITodo } from "./store/todos/todos.slice";
+import { Categories, ITodo, addTodo } from "./store/todos/todos.slice";
 import { Category } from "./components/category";
 import { CategoryButton } from "./components/categoryButton";
 import { Task } from "./components/task";
@@ -8,17 +8,31 @@ import { CiShoppingBasket } from "react-icons/ci";
 import { CiBasketball } from "react-icons/ci";
 import { GiVacuumCleaner } from "react-icons/gi";
 import { useCategoryCounts } from "./hooks/useCategoryCounts";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./store/store";
+import Dialog from "./components/Dialog";
+import { AddEditForm } from "./components/addEditForm";
+import { IoIosAdd } from "react-icons/io";
 
 function App() {
     const [selectedCategory, setSelectedCategory] = useState<Categories | null>(null);
+    const [open, setOpen] = useState<boolean>(false);
     const todos = useSelector((state: RootState) => state.todos);
 
     const categoryCounts = useCategoryCounts();
 
     const handleCategorySelect = (category: Categories | null) => {
         setSelectedCategory(category);
+    };
+    const dispatch = useDispatch();
+
+    const handleSubmit = (data: ITodo) => {
+        dispatch(
+            addTodo({
+                ...data,
+            })
+        );
+        setOpen(false);
     };
 
     const filteredTodos = selectedCategory
@@ -27,8 +41,8 @@ function App() {
 
     return (
         <div>
-            <div className="container m-auto px-3 min-w-80 transition-all duration-250">
-                <h1 className="text-2xl font-bold mb-5 mt-9">Hello in my todo list</h1>
+            <div className="container m-auto px-3 min-w-80 transition-all duration-250 relative">
+                <h1 className="text-2xl font-bold mb-5 mt-9">Todo list</h1>
                 <div className="flex flex-wrap gap-3 justify-between mb-8">
                     <CategoryButton
                         onClick={() => handleCategorySelect(Categories.WORK)}
@@ -78,10 +92,25 @@ function App() {
                 <h2 className="text-xl font-bold mb-4">Дела на сегодня:</h2>
                 <ul>
                     {filteredTodos.map((todo, index) => {
-                        return <Task todo={todo} key={index} />;
+                        return <Task task={todo.task} key={index} index={index} />;
                     })}
                 </ul>
+                <button
+                    onClick={() => setOpen(true)}
+                    className="fixed flex items-center justify-center bottom-8 right-8 p-4 rounded-full bg-blue-500 text-white"
+                >
+                    <IoIosAdd />
+                </button>
             </div>
+            {open && (
+                <Dialog onOpen={open}>
+                    <AddEditForm
+                        buttonText="Добавить"
+                        onSubmit={handleSubmit}
+                        onClose={() => setOpen(false)}
+                    />
+                </Dialog>
+            )}
         </div>
     );
 }
