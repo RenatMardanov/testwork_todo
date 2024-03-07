@@ -21,7 +21,9 @@ export const AddEditForm: React.FC<AddEditFormProps> = ({ buttonText, onClose, o
         defaultValues: {
             category: Categories.WORK,
             importance: 1,
+            isDone: false,
         },
+        mode: "onChange",
     });
 
     const handleFormSubmit: SubmitHandler<ITodo> = (data) => {

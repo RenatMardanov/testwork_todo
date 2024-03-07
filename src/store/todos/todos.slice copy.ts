@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { Draft, produce } from "immer"; // Импортируем Draft из immer
 
 export enum Categories {
     WORK = "Задачи",
@@ -42,12 +43,15 @@ export const todosSlice = createSlice({
     initialState: preloadedState,
     reducers: {
         addTodo: (state: ITodo[], action: PayloadAction<ITodo>) => {
-            state.push(action.payload);
-            addToLocalStorage(state);
+            return produce(state, (draftState: Draft<ITodo[]>) => {
+                draftState.push(action.payload);
+                addToLocalStorage(draftState);
+            });
         },
         removeTodo: (state: ITodo[], action: PayloadAction<number>) => {
-            state.splice(action.payload, 1);
-            addToLocalStorage(state);
+            return produce(state, (draftState: Draft<ITodo[]>) => {
+                draftState.splice(action.payload, 1);
+            });
         },
     },
 });

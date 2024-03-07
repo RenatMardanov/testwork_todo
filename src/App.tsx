@@ -35,7 +35,7 @@ function App() {
         setOpen(false);
     };
 
-    const filteredTodos = selectedCategory
+    const filteredTodos: ITodo[] = selectedCategory
         ? todos.filter((todo: ITodo) => todo.category === selectedCategory)
         : todos;
 
