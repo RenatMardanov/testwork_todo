@@ -5,10 +5,11 @@ import { ITodo } from "../../store/todos/todos.slice";
 
 interface PrioritySelectProps {
     setValue: UseFormSetValue<ITodo>;
+    active: number;
 }
 
-export const PrioritySelect: React.FC<PrioritySelectProps> = ({ setValue }) => {
-    const [activePriority, setActivePriority] = useState<number | null>(null);
+export const PrioritySelect: React.FC<PrioritySelectProps> = ({ setValue, active }) => {
+    const [activePriority, setActivePriority] = useState<number>(active);
 
     const handlePrioritySelect = (priority: number) => {
         setValue("importance", priority);
@@ -18,9 +19,9 @@ export const PrioritySelect: React.FC<PrioritySelectProps> = ({ setValue }) => {
     return (
         <>
             <label htmlFor="importance" className="mb-2">
-                Выберите приоритет
+                Выберите приоритет:
             </label>
-            <div className="flex gap-2 mb-2">
+            <div className="flex justify-around mb-4">
                 <CategoryButton
                     onClick={() => handlePrioritySelect(1)}
                     color="bg-green-400"

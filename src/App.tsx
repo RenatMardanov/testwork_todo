@@ -1,25 +1,38 @@
 import { useState } from "react";
-import { Categories, ITodo, addTodo } from "./store/todos/todos.slice";
-import { Category } from "./components/category";
-import { CategoryButton } from "./components/categoryButton";
-import { Task } from "./components/task";
-import { GoTasklist } from "react-icons/go";
-import { CiShoppingBasket } from "react-icons/ci";
-import { CiBasketball } from "react-icons/ci";
-import { GiVacuumCleaner } from "react-icons/gi";
-import { useCategoryCounts } from "./hooks/useCategoryCounts";
+import { Categories, ITodo, addTodo, editTodo } from "./store/todos/todos.slice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./store/store";
-import Dialog from "./components/Dialog";
-import { AddEditForm } from "./components/addEditForm";
+import {
+    AddEditForm,
+    Category,
+    CategoryButton,
+    CategoryItem,
+    Container,
+    Dialog,
+    FillTitle,
+    Header,
+} from "./components";
+import { GoTasklist } from "react-icons/go";
+import { CiBasketball, CiShoppingBasket } from "react-icons/ci";
+import { GiVacuumCleaner } from "react-icons/gi";
+import { Task } from "./components/task";
 import { IoIosAdd } from "react-icons/io";
 
+export interface IOpenHandler {
+    status: boolean;
+    obj?: ITodo;
+    index?: number;
+}
 function App() {
-    const [selectedCategory, setSelectedCategory] = useState<Categories | null>(null);
-    const [open, setOpen] = useState<boolean>(false);
+    const [selectedCategory, setSelectedCategory] = useState<Categories | null>(Categories.WORK);
+    const [open, setOpen] = useState<IOpenHandler>({
+        status: false,
+    });
     const todos = useSelector((state: RootState) => state.todos);
 
-    const categoryCounts = useCategoryCounts();
+    const getIndex = (todo: ITodo) => {
+        return todos.indexOf(todo);
+    };
 
     const handleCategorySelect = (category: Categories | null) => {
         setSelectedCategory(category);
@@ -27,31 +40,49 @@ function App() {
     const dispatch = useDispatch();
 
     const handleSubmit = (data: ITodo) => {
-        dispatch(
-            addTodo({
-                ...data,
-            })
-        );
-        setOpen(false);
+        dispatch(addTodo(data));
+        setOpen({ status: false });
+    };
+
+    const handleEdit = (index: number, data: ITodo) => {
+        dispatch(editTodo({ index, todo: data }));
+        setOpen({ status: false });
     };
 
     const filteredTodos: ITodo[] = selectedCategory
-        ? todos.filter((todo: ITodo) => todo.category === selectedCategory)
+        ? todos.filter((todo: ITodo) => {
+              if (selectedCategory === Categories.DONE) {
+                  return todo.isDone === true;
+              } else {
+                  return todo.category === selectedCategory && !todo.isDone;
+              }
+          })
         : todos;
 
+    const categoryCounts = {
+        [Categories.WORK]: todos.filter((todo) => todo.category === Categories.WORK && !todo.isDone)
+            .length,
+        [Categories.SHOPPING]: todos.filter(
+            (todo) => todo.category === Categories.SHOPPING && !todo.isDone
+        ).length,
+        [Categories.SPORT]: todos.filter(
+            (todo) => todo.category === Categories.SPORT && !todo.isDone
+        ).length,
+        [Categories.DONE]: todos.filter((todo) => todo.isDone).length,
+    };
     return (
-        <div>
-            <div className="container m-auto px-3 min-w-80 transition-all duration-250 relative">
-                <h1 className="text-2xl font-bold mb-5 mt-9">Todo list</h1>
-                <div className="flex flex-wrap gap-3 justify-between mb-8">
+        <>
+            <Container>
+                <Header header={"Todo list"} />
+                <Category>
                     <CategoryButton
                         onClick={() => handleCategorySelect(Categories.WORK)}
                         color="bg-teal-400"
                         active={selectedCategory === Categories.WORK}
                     >
-                        <Category
+                        <CategoryItem
                             count={categoryCounts[Categories.WORK]}
-                            name="Задачи"
+                            name={Categories.WORK}
                             icon={<GoTasklist size={25} />}
                         />
                     </CategoryButton>
@@ -60,9 +91,9 @@ function App() {
                         color="bg-emerald-400"
                         active={selectedCategory === Categories.SHOPPING}
                     >
-                        <Category
+                        <CategoryItem
                             count={categoryCounts[Categories.SHOPPING]}
-                            name="Шопинг"
+                            name={Categories.SHOPPING}
                             icon={<CiShoppingBasket size={25} />}
                         />
                     </CategoryButton>
@@ -71,47 +102,56 @@ function App() {
                         color="bg-violet-400"
                         active={selectedCategory === Categories.SPORT}
                     >
-                        <Category
+                        <CategoryItem
                             count={categoryCounts[Categories.SPORT]}
-                            name="Занятия спортом"
+                            name={Categories.SPORT}
                             icon={<CiBasketball size={25} />}
                         />
                     </CategoryButton>
                     <CategoryButton
-                        onClick={() => handleCategorySelect(Categories.HOME)}
+                        onClick={() => handleCategorySelect(Categories.DONE)}
                         color="bg-slate-400"
-                        active={selectedCategory === Categories.HOME}
+                        active={selectedCategory === Categories.DONE}
                     >
-                        <Category
-                            count={categoryCounts[Categories.HOME]}
-                            name="Дела по дому"
+                        <CategoryItem
+                            count={categoryCounts[Categories.DONE]}
+                            name={Categories.DONE}
                             icon={<GiVacuumCleaner size={20} />}
                         />
                     </CategoryButton>
-                </div>
-                <h2 className="text-xl font-bold mb-4">Дела на сегодня:</h2>
+                </Category>
+                <FillTitle title="Дела на сегодня: " />
                 <ul>
-                    {filteredTodos.map((todo, index) => {
-                        return <Task task={todo.task} key={index} index={index} />;
+                    {filteredTodos.map((todo) => {
+                        return (
+                            <Task
+                                task={todo}
+                                onEdit={setOpen}
+                                key={getIndex(todo)}
+                                index={getIndex(todo)}
+                            />
+                        );
                     })}
                 </ul>
                 <button
-                    onClick={() => setOpen(true)}
+                    onClick={() => setOpen({ ...open, status: true })}
                     className="fixed flex items-center justify-center bottom-8 right-8 p-4 rounded-full bg-blue-500 text-white"
                 >
                     <IoIosAdd />
                 </button>
-            </div>
-            {open && (
-                <Dialog onOpen={open}>
-                    <AddEditForm
-                        buttonText="Добавить"
-                        onSubmit={handleSubmit}
-                        onClose={() => setOpen(false)}
-                    />
-                </Dialog>
-            )}
-        </div>
+                {open && (
+                    <Dialog onOpen={open.status}>
+                        <AddEditForm
+                            onSubmit={handleSubmit}
+                            onEdit={handleEdit}
+                            onClose={() => setOpen({ status: false })}
+                            todo={open.obj}
+                            index={getIndex(open.obj!)}
+                        />
+                    </Dialog>
+                )}
+            </Container>
+        </>
     );
 }
 

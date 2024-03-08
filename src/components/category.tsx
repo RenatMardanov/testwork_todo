@@ -1,21 +1,9 @@
+import { ReactNode } from "react";
+
 interface ICategory {
-    name: string;
-    count?: number;
-    icon?: React.ReactNode;
+    children: ReactNode;
 }
 
-export const Category: React.FC<ICategory> = ({ name, count, icon }) => {
-    return (
-        // <div className={clsx(` ${color}`)}>
-        <>
-            <div className="w-8  h-8 rounded-full bg-white flex items-center justify-center mb-1">
-                {icon}
-            </div>
-            <div className="flex justify-between px-2 font-bold">
-                <p>{name}</p>
-                <p>{count}</p>
-            </div>
-        </>
-        // </div>
-    );
+export const Category: React.FC<ICategory> = ({ children }) => {
+    return <div className="flex flex-wrap gap-3 justify-between mb-8">{children}</div>;
 };

@@ -5,10 +5,11 @@ import { UseFormSetValue } from "react-hook-form";
 
 interface CategorySelectProps {
     setValue: UseFormSetValue<ITodo>;
+    active: Categories;
 }
 
-export const CategorySelect: React.FC<CategorySelectProps> = ({ setValue }) => {
-    const [activeCategory, setActiveCategory] = useState<Categories | null>(null);
+export const CategorySelect: React.FC<CategorySelectProps> = ({ setValue, active }) => {
+    const [activeCategory, setActiveCategory] = useState<Categories>(active);
 
     const handleCategorySelect = (category: Categories) => {
         setValue("category", category);
@@ -17,10 +18,10 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({ setValue }) => {
 
     return (
         <>
-            <label htmlFor="category" className="mb-2">
-                Выберите категорию
+            <label htmlFor="category" className="mb-2 block">
+                Выберите категорию:
             </label>
-            <div className="flex gap-2 mb-2">
+            <div className="flex mb-2 justify-between">
                 <CategoryButton
                     color="bg-teal-400"
                     onClick={() => handleCategorySelect(Categories.WORK)}
@@ -41,13 +42,6 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({ setValue }) => {
                     active={activeCategory === Categories.SPORT}
                 >
                     {Categories.SPORT}
-                </CategoryButton>
-                <CategoryButton
-                    color="bg-slate-400"
-                    onClick={() => handleCategorySelect(Categories.HOME)}
-                    active={activeCategory === Categories.HOME}
-                >
-                    {Categories.HOME}
                 </CategoryButton>
             </div>
         </>

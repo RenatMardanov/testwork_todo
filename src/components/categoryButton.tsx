@@ -23,8 +23,8 @@ export const CategoryButton: React.FC<CategoryButtonProps> = ({
         <button
             onClick={handleClick}
             className={clsx(
-                "w-5/12 lg:w-1/5 rounded-xl p-4 shadow-md hover:shadow-xl transition-all",
-                active && "bg-opacity-50 shadow-lg border-black border",
+                "w-5/12 lg:w-1/5 rounded-xl p-4 shadow-md hover:shadow-xl transition-all min-w-min box-border",
+                active && "bg-opacity-50 shadow-lg shadow-black",
                 color
             )}
         >

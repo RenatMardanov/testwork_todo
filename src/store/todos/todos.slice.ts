@@ -3,8 +3,8 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 export enum Categories {
     WORK = "Задачи",
     SPORT = "Занятия спортом",
-    HOME = "Дела по дому",
-    SHOPPING = "Покупки",
+    SHOPPING = "Шопинг",
+    DONE = "Выполненные",
 }
 
 export interface ITodo {
@@ -24,9 +24,7 @@ const loadFromLocalStorage = (): ITodo[] | undefined => {
         if (serializedState === null) {
             return [];
         }
-        const data = JSON.parse(serializedState);
-        console.log(data);
-        return data;
+        return JSON.parse(serializedState);
     } catch (err) {
         if (err instanceof Error) {
             console.log("Ошибка получения данных из хранилища", err.message);
@@ -43,14 +41,32 @@ export const todosSlice = createSlice({
     reducers: {
         addTodo: (state: ITodo[], action: PayloadAction<ITodo>) => {
             state.push(action.payload);
+            console.log("Сработало добавление");
             addToLocalStorage(state);
         },
         removeTodo: (state: ITodo[], action: PayloadAction<number>) => {
             state.splice(action.payload, 1);
             addToLocalStorage(state);
         },
+        editTodo: (state: ITodo[], action: PayloadAction<{ index: number; todo: ITodo }>) => {
+            const { index, todo } = action.payload;
+            console.log("Сработало изменение");
+            state[index] = {
+                ...todo,
+            };
+
+            addToLocalStorage(state);
+        },
+        editIsDoneTodo: (state: ITodo[], action: PayloadAction<number>) => {
+            const index = action.payload;
+            state[index] = {
+                ...state[index],
+                isDone: !state[index].isDone, // Toggle the value
+            };
+            addToLocalStorage(state);
+        },
     },
 });
 
-export const { addTodo, removeTodo } = todosSlice.actions;
+export const { addTodo, removeTodo, editTodo, editIsDoneTodo } = todosSlice.actions;
 export default todosSlice.reducer;
