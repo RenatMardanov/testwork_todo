@@ -2,9 +2,9 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export enum Categories {
     WORK = "Задачи",
-    SPORT = "Занятия спортом",
-    SHOPPING = "Шопинг",
-    DONE = "Выполненные",
+    SPORT = "Спорт",
+    SHOPPING = "Покупки",
+    DONE = "Выполнено",
 }
 
 export interface ITodo {
@@ -41,7 +41,6 @@ export const todosSlice = createSlice({
     reducers: {
         addTodo: (state: ITodo[], action: PayloadAction<ITodo>) => {
             state.push(action.payload);
-            console.log("Сработало добавление");
             addToLocalStorage(state);
         },
         removeTodo: (state: ITodo[], action: PayloadAction<number>) => {
@@ -50,7 +49,6 @@ export const todosSlice = createSlice({
         },
         editTodo: (state: ITodo[], action: PayloadAction<{ index: number; todo: ITodo }>) => {
             const { index, todo } = action.payload;
-            console.log("Сработало изменение");
             state[index] = {
                 ...todo,
             };

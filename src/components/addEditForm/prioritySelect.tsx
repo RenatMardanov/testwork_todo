@@ -21,7 +21,7 @@ export const PrioritySelect: React.FC<PrioritySelectProps> = ({ setValue, active
             <label htmlFor="importance" className="mb-2">
                 Выберите приоритет:
             </label>
-            <div className="flex justify-around mb-4">
+            <div className="flex gap-2 justify-around mb-4">
                 <CategoryButton
                     onClick={() => handlePrioritySelect(1)}
                     color="bg-green-400"

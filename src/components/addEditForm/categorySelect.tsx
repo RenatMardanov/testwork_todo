@@ -21,7 +21,7 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({ setValue, active
             <label htmlFor="category" className="mb-2 block">
                 Выберите категорию:
             </label>
-            <div className="flex mb-2 justify-between">
+            <div className="flex mb-2 gap-2 justify-between">
                 <CategoryButton
                     color="bg-teal-400"
                     onClick={() => handleCategorySelect(Categories.WORK)}
