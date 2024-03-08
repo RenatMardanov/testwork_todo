@@ -12,7 +12,7 @@ export const CategoryItem: React.FC<ICategoryItem> = ({ name, count, icon }) => 
                 {icon}
             </div>
             <div className="flex justify-between p-2 font-bold text-base md:text-xl mt-2">
-                <p className="w-2/3">{name}</p>
+                <p className="w-2/3 text-left">{name}</p>
                 <p>{count}</p>
             </div>
         </>
