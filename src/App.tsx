@@ -14,9 +14,9 @@ import {
 } from "./components";
 import { GoTasklist } from "react-icons/go";
 import { CiBasketball, CiShoppingBasket } from "react-icons/ci";
-import { GiVacuumCleaner } from "react-icons/gi";
 import { Task } from "./components/task";
 import { IoIosAdd } from "react-icons/io";
+import { MdDone } from "react-icons/md";
 
 export interface IOpenHandler {
     status: boolean;
@@ -116,7 +116,7 @@ function App() {
                         <CategoryItem
                             count={categoryCounts[Categories.DONE]}
                             name={Categories.DONE}
-                            icon={<GiVacuumCleaner size={20} />}
+                            icon={<MdDone size={20} />}
                         />
                     </CategoryButton>
                 </Category>

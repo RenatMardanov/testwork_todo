@@ -6,7 +6,6 @@ interface ICategoryItem {
 
 export const CategoryItem: React.FC<ICategoryItem> = ({ name, count, icon }) => {
     return (
-        // <div className={clsx(` ${color}`)}>
         <>
             <div className="w-8  h-8 rounded-full bg-white flex items-center justify-center mb-1">
                 {icon}
@@ -16,6 +15,5 @@ export const CategoryItem: React.FC<ICategoryItem> = ({ name, count, icon }) => 
                 <p>{count}</p>
             </div>
         </>
-        // </div>
     );
 };
