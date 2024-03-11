@@ -59,7 +59,7 @@ export const todosSlice = createSlice({
             const index = action.payload;
             state[index] = {
                 ...state[index],
-                isDone: !state[index].isDone, // Toggle the value
+                isDone: !state[index].isDone,
             };
             addToLocalStorage(state);
         },

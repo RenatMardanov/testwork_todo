@@ -139,17 +139,15 @@ function App() {
                 >
                     <IoIosAdd />
                 </button>
-                {open && (
-                    <Dialog onOpen={open.status}>
-                        <AddEditForm
-                            onSubmit={handleSubmit}
-                            onEdit={handleEdit}
-                            onClose={() => setOpen({ status: false })}
-                            todo={open.obj}
-                            index={getIndex(open.obj!)}
-                        />
-                    </Dialog>
-                )}
+                <Dialog onOpen={open.status}>
+                    <AddEditForm
+                        onSubmit={handleSubmit}
+                        onEdit={handleEdit}
+                        onClose={() => setOpen({ status: false })}
+                        todo={open.obj}
+                        index={getIndex(open.obj!)}
+                    />
+                </Dialog>
             </Container>
         </>
     );

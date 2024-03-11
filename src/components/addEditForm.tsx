@@ -37,7 +37,7 @@ export const AddEditForm: React.FC<AddEditFormProps> = ({
     });
 
     const handleFormSubmit: SubmitHandler<ITodo> = (data) => {
-        if (todo && index) {
+        if (todo && index !== undefined && index >= 0) {
             onEdit(index, data);
         } else {
             onSubmit(data);
@@ -45,7 +45,10 @@ export const AddEditForm: React.FC<AddEditFormProps> = ({
     };
 
     return (
-        <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col box-border">
+        <form
+            onSubmit={handleSubmit(handleFormSubmit)}
+            className="flex flex-col box-border transition-all"
+        >
             <TaskInput error={errors} register={register} />
             <CategorySelect active={getValues("category")} setValue={setValue} />
             <PrioritySelect active={getValues("importance")} setValue={setValue} />
